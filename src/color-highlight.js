@@ -29,6 +29,7 @@ export class DocumentHighlight {
    * @memberOf DocumentHighlight
    */
   constructor(document, viewConfig) {
+
     this.disposed = false;
 
     this.document = document;
@@ -82,7 +83,10 @@ export class DocumentHighlight {
 
     switch (document.languageId) {
       case 'css':
-        this.strategies.push(findCssVars);
+        this.strategies.push(text => findCssVars(text, {
+          cwd: dirname(document.uri.fsPath),
+          globalPaths: viewConfig.css.globalPaths
+        }));
         break;
       case 'less':
         this.strategies.push(findLessVars);
@@ -96,7 +100,8 @@ export class DocumentHighlight {
           data: text,
           cwd: dirname(document.uri.fsPath),
           extensions: ['.scss', '.sass'],
-          includePaths: viewConfig.sass.includePaths || []
+          includePaths: viewConfig.sass.includePaths || [],
+          globalPaths: viewConfig.sass.globalPaths
         }));
         break;
     }

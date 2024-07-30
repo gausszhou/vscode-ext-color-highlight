@@ -2,6 +2,7 @@ import { findHexRGBA } from './hex';
 import { findWords } from './words';
 import { findColorFunctionsInText, sortStringsInDescendingOrder } from './functions';
 import { findHwb } from './hwb';
+import { loadGlobalVariables } from '../lib/global-importer';
 
 const setVariable = /^\s*(--[-\w]+)\s*:\s*(.*)$/gm;
 
@@ -14,8 +15,10 @@ const setVariable = /^\s*(--[-\w]+)\s*:\s*(.*)$/gm;
  *  color: string
  * }}
  */
-export async function findCssVars(text) {
-  let match = setVariable.exec(text);
+export async function findCssVars(text, importerOptions) {
+  const injectContent = loadGlobalVariables(importerOptions);
+  const fullText =  injectContent + text;
+  let match = setVariable.exec(fullText);
   let result = [];
 
   const varColor = {};
@@ -36,7 +39,7 @@ export async function findCssVars(text) {
       varColor[name] = values[0].color;
     }
 
-    match = setVariable.exec(text);
+    match = setVariable.exec(fullText);
   }
 
   if (!varNames.length) {

@@ -3,6 +3,7 @@ import { findWords } from './words';
 import { findColorFunctionsInText, sortStringsInDescendingOrder } from './functions';
 import { findHwb } from './hwb';
 import { parseImports } from '../lib/sass-importer';
+import { loadGlobalVariables } from '../lib/global-importer';
 
 const setVariable = /^\s*\$([-\w]+)\s*:\s*(.*)$/gm;
 
@@ -24,7 +25,9 @@ export async function findScssVars(text, importerOptions) {
     console.log('Error during imports loading, falling back to local variables parsing');
   }
 
-  let match = setVariable.exec(textWithImports);
+  const injectContent = loadGlobalVariables(importerOptions);
+  const fullText =  injectContent + textWithImports;
+  let match = setVariable.exec(fullText);
   let result = [];
 
   const varColor = {};
@@ -45,7 +48,7 @@ export async function findScssVars(text, importerOptions) {
       varColor[name] = values[0].color;
     }
 
-    match = setVariable.exec(textWithImports);
+    match = setVariable.exec(fullText);
   }
 
   if (!varNames.length) {

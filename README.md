@@ -20,3 +20,16 @@ Please answer the questions in this questionnaire. Your feedback is very valuabl
 - [lochstar](https://github.com/lochstar) - Styling modes for the marker
 
 Feel free to contribute!
+
+## Features
+
+- suport global variables file for css
+- suport global variables file for sass/scss
+
+```json
+{    
+    "color-highlight.enable": true,
+    "color-highlight.css.globalPaths": ["./variables.css"],
+    "color-highlight.sass.globalPaths": ["./variables.scss"],
+}
+```
