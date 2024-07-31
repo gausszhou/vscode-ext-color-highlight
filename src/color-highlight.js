@@ -81,23 +81,37 @@ export class DocumentHighlight {
       if (isValid) this.strategies.push(findHslNoFn);
     }
 
-    this.strategies.push(text => findCssVars(text, {
-      cwd: dirname(document.uri.fsPath),
-      globalPaths: viewConfig.css.globalPaths
-    }));
-
+    
     switch (document.languageId) {
-      case 'vue':
+      case 'css':
+        this.strategies.push(text => findCssVars(text, {
+          cwd: dirname(document.uri.fsPath),
+          globalPaths: viewConfig.css.globalPaths
+        }));
+        break;
       case 'less':
         this.strategies.push(findLessVars);
         break;
-      case 'vue':
       case 'stylus':
         this.strategies.push(findStylVars);
         break;
-      case 'vue':
       case 'sass':
       case 'scss':
+        this.strategies.push(text => findScssVars(text, {
+          data: text,
+          cwd: dirname(document.uri.fsPath),
+          extensions: ['.scss', '.sass'],
+          includePaths: viewConfig.sass.includePaths || [],
+          globalPaths: viewConfig.sass.globalPaths
+        }));
+        break;
+      default:
+        this.strategies.push(text => findCssVars(text, {
+          cwd: dirname(document.uri.fsPath),
+          globalPaths: viewConfig.css.globalPaths
+        }));
+        this.strategies.push(findLessVars);
+        this.strategies.push(findStylVars);
         this.strategies.push(text => findScssVars(text, {
           data: text,
           cwd: dirname(document.uri.fsPath),
