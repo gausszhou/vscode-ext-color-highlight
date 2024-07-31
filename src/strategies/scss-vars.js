@@ -26,7 +26,8 @@ export async function findScssVars(text, importerOptions) {
   }
 
   const injectContent = loadGlobalVariables(importerOptions);
-  const fullText =  injectContent + textWithImports;
+  const fullText =  `${injectContent}
+${textWithImports}`;
   let match = setVariable.exec(fullText);
   let result = [];
 

@@ -81,19 +81,21 @@ export class DocumentHighlight {
       if (isValid) this.strategies.push(findHslNoFn);
     }
 
+    this.strategies.push(text => findCssVars(text, {
+      cwd: dirname(document.uri.fsPath),
+      globalPaths: viewConfig.css.globalPaths
+    }));
+
     switch (document.languageId) {
-      case 'css':
-        this.strategies.push(text => findCssVars(text, {
-          cwd: dirname(document.uri.fsPath),
-          globalPaths: viewConfig.css.globalPaths
-        }));
-        break;
+      case 'vue':
       case 'less':
         this.strategies.push(findLessVars);
         break;
+      case 'vue':
       case 'stylus':
         this.strategies.push(findStylVars);
         break;
+      case 'vue':
       case 'sass':
       case 'scss':
         this.strategies.push(text => findScssVars(text, {
@@ -105,7 +107,6 @@ export class DocumentHighlight {
         }));
         break;
     }
-
     this.initialize(viewConfig);
   }
 

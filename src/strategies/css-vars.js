@@ -17,7 +17,8 @@ const setVariable = /^\s*(--[-\w]+)\s*:\s*(.*)$/gm;
  */
 export async function findCssVars(text, importerOptions) {
   const injectContent = loadGlobalVariables(importerOptions);
-  const fullText =  injectContent + text;
+  const fullText =  `${injectContent}
+${text}`;
   let match = setVariable.exec(fullText);
   let result = [];
 
