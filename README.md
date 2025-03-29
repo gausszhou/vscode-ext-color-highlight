@@ -1,6 +1,6 @@
 # vscode-ext-color-highlight
 
-VS Code 颜色高亮插件，支持全局 CSS 变量和 SASS 变量
+VS Code 颜色高亮插件，支持全局变量
 
 ## Configuration
 
